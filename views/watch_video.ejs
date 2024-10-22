@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include('components/user_header.ejs'); %>
+
+<% if (content) { %>
+<section class="watch-video">
+    <div class="video-details">
+        <video src="/uploaded_files/<%= content.video %>" class="video" poster="/uploaded_files/<%= content.thumb %>" controls autoplay></video>
+        <h3 class="title"><%= content.title %></h3>
+        <div class="info">
+            <p><i class="fas fa-calendar"></i><span><%= content.date %></span></p>
+            <p><i class="fas fa-heart"></i><span><%= totalLikes %> likes</span></p>
+        </div>
+        <div class="tutor">
+            <img src="/uploaded_files/<%= content.tutor.image %>" alt="">
+            <div>
+                <h3><%= content.tutor.name %></h3>
+                <span><%= content.tutor.profession %></span>
+            </div>
+        </div>
+        <form action="/like_content" method="post" class="flex">
+            <input type="hidden" name="content_id" value="<%= content.id %>">
+            <a href="/playlist?get_id=<%= content.playlist_id %>" class="inline-btn">View Playlist</a>
+            <button type="submit" name="like_content"><i class="far fa-heart"></i><span>Like</span></button>
+        </form>
+        <div class="description"><p><%= content.description %></p></div>
+    </div>
+</section>
+
+<section class="comments">
+    <h1 class="heading">Add a Comment</h1>
+    <form action="/add_comment" method="post" class="add-comment">
+        <input type="hidden" name="content_id" value="<%= content.id %>">
+        <textarea name="comment_box" required placeholder="Write your comment..." maxlength="1000" cols="30" rows="10"></textarea>
+        <input type="submit" value="Add Comment" name="add_comment" class="inline-btn">
+    </form>
+
+    <h1 class="heading">User Comments</h1>
+    <div class="show-comments">
+        <% comments.forEach(comment => { %>
+        <div class="box">
+            <div class="user">
+                <img src="/uploaded_files/<%= comment.user.image %>" alt="">
+                <div>
+                    <h3><%= comment.user.name %></h3>
+                    <span><%= comment.date %></span>
+                </div>
+            </div>
+            <p class="text"><%= comment.comment %></p>
+            <form action="/delete_comment" method="post" class="flex-btn">
+                <input type="hidden" name="comment_id" value="<%= comment.id %>">
+                <button type="submit" name="delete_comment"><i class="fas fa-trash"></i>Delete</button>
+            </form>
+            <form action="/update_comment" method="post" class="flex-btn">
+                <input type="hidden" name="update_id" value="<%= comment.id %>">
+                <textarea name="update_box" required placeholder="Update your comment..." maxlength="1000" cols="30" rows="10"></textarea>
+                <input type="submit" value="Update Comment" name="update_comment" class="inline-btn">
+            </form>
+        </div>
+        <% }) %>
+    </div>
+</section>
+
+<% } else { %>
+<p>Content not found!</p>
+<% } %>
+
+<%- include('components/footer.ejs'); %>
+</body>
+</html>

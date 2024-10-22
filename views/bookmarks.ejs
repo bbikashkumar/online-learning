@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Bookmarks</title>
+
+   <!-- Font Awesome CDN link -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS file link -->
+   <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+<%- include('components/user_header') %>
+
+<section class="courses">
+   <h1 class="heading">Bookmarked Playlists</h1>
+
+   <div class="box-container">
+      <% if (bookmarks.length > 0) { %>
+         <% bookmarks.forEach(bookmark => { %>
+            <div class="box">
+               <div class="tutor">
+                  <img src="uploaded_files/<%= bookmark.tutor.image %>" alt="">
+                  <div>
+                     <h3><%= bookmark.tutor.name %></h3>
+                     <span><%= bookmark.course.date %></span>
+                  </div>
+               </div>
+               <img src="uploaded_files/<%= bookmark.course.thumb %>" class="thumb" alt="">
+               <h3 class="title"><%= bookmark.course.title %></h3>
+               <a href="/playlist?get_id=<%= bookmark.course.id %>" class="inline-btn">View Playlist</a>
+            </div>
+         <% }); %>
+      <% } else { %>
+         <p class="empty">Nothing bookmarked yet!</p>
+      <% } %>
+   </div>
+</section>
+
+<%- include('components/footer') %>
+
+<!-- Custom JS file link -->
+<script src="js/script.js"></script>
+   
+</body>
+</html>

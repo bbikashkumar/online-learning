@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tutors</title>
+
+   <!-- Font Awesome CDN link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS file link  -->
+   <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include('components/user_header.ejs'); %>
+
+<section class="teachers">
+   <h1 class="heading">Expert Tutors</h1>
+
+   <form action="/search_tutor" method="post" class="search-tutor">
+      <input type="text" name="search_tutor" maxlength="100" placeholder="Search tutor..." required>
+      <button type="submit" name="search_tutor_btn" class="fas fa-search"></button>
+   </form>
+
+   <div class="box-container">
+      <% if (tutors.length > 0) { %>
+         <% tutors.forEach(tutor => { %>
+            <div class="box">
+               <div class="tutor">
+                  <img src="/uploaded_files/<%= tutor.image %>" alt="">
+                  <div>
+                     <h3><%= tutor.name %></h3>
+                     <span><%= tutor.profession %></span>
+                  </div>
+               </div>
+               <p>Playlists: <span><%= tutor.total_playlists %></span></p>
+               <p>Total Videos: <span><%= tutor.total_contents %></span></p>
+               <p>Total Likes: <span><%= tutor.total_likes %></span></p>
+               <p>Total Comments: <span><%= tutor.total_comments %></span></p>
+               <form action="/tutor_profile" method="post">
+                  <input type="hidden" name="tutor_email" value="<%= tutor.email %>">
+                  <input type="submit" value="View Profile" name="tutor_fetch" class="inline-btn">
+               </form>
+            </div>
+         <% }) %>
+      <% } else { %>
+         <p class="empty"><%= message %></p>
+      <% } %>
+   </div>
+</section>
+
+<%- include('components/footer.ejs'); %>
+
+<!-- Custom JS file link  -->
+<script src="/js/script.js"></script>
+</body>
+</html>

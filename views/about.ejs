@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>About</title>
+
+   <!-- Font Awesome CDN link -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS file link -->
+   <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+<%- include('components/user_header') %>
+
+<!-- About section starts  -->
+<section class="about">
+   <div class="row">
+      <div class="image">
+         <img src="./img/about-img.svg" alt="">
+      </div>
+      <div class="content">
+         <h3>Why Choose Us?</h3>
+         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque nobis distinctio, nisi consequatur ad sequi, rem odit fugiat assumenda eligendi iure aut sunt ratione, tempore porro expedita quisquam.</p>
+         <a href="/courses" class="inline-btn">Our Courses</a>
+      </div>
+   </div>
+
+   <div class="box-container">
+      <div class="box">
+         <i class="fas fa-graduation-cap"></i>
+         <div>
+            <h3>+1k</h3>
+            <span>Online Courses</span>
+         </div>
+      </div>
+
+      <div class="box">
+         <i class="fas fa-user-graduate"></i>
+         <div>
+            <h3>+25k</h3>
+            <span>Brilliant Students</span>
+         </div>
+      </div>
+
+      <div class="box">
+         <i class="fas fa-chalkboard-user"></i>
+         <div>
+            <h3>+5k</h3>
+            <span>Expert Teachers</span>
+         </div>
+      </div>
+
+      <div class="box">
+         <i class="fas fa-briefcase"></i>
+         <div>
+            <h3>100%</h3>
+            <span>Job Placement</span>
+         </div>
+      </div>
+   </div>
+</section>
+<!-- About section ends -->
+
+<!-- Reviews section starts -->
+<section class="reviews">
+   <h1 class="heading">Student's Reviews</h1>
+   <div class="box-container">
+      <% for (let review of reviews) { %>
+      <div class="box">
+         <p><%= review.text %></p>
+         <div class="user">
+            <img src="<%= review.image %>" alt="">
+            <div>
+               <h3><%= review.name %></h3>
+               <div class="stars">
+                  <% for (let i = 0; i < review.rating; i++) { %>
+                  <i class="fas fa-star"></i>
+                  <% } %>
+                  <% if (review.rating % 1 !== 0) { %>
+                  <i class="fas fa-star-half-alt"></i>
+                  <% } %>
+               </div>
+            </div>
+         </div>
+      </div>
+      <% } %>
+   </div>
+</section>
+<!-- Reviews section ends -->
+
+<%- include('components/footer') %>
+
+<!-- Custom JS file link -->
+<script src="js/script.js"></script>
+   
+</body>
+</html>

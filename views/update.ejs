@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Update Profile</title>
+
+   <!-- Font Awesome CDN link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS file link  -->
+   <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include('components/user_header') %>
+
+<section class="form-container" style="min-height: calc(100vh - 19rem);">
+   <form action="/update" method="post" enctype="multipart/form-data">
+      <h3>Update Profile</h3>
+      <div class="flex">
+         <div class="col">
+            <p>Your Name</p>
+            <input type="text" name="name" placeholder="<%= fetch_profile.name %>" maxlength="100" class="box">
+            <p>Your Email</p>
+            <input type="email" name="email" placeholder="<%= fetch_profile.email %>" maxlength="100" class="box">
+            <p>Update Picture</p>
+            <input type="file" name="image" accept="image/*" class="box">
+         </div>
+         <div class="col">
+            <p>Old Password</p>
+            <input type="password" name="old_pass" placeholder="Enter your old password" maxlength="50" class="box">
+            <p>New Password</p>
+            <input type="password" name="new_pass" placeholder="Enter your new password" maxlength="50" class="box">
+            <p>Confirm Password</p>
+            <input type="password" name="cpass" placeholder="Confirm your new password" maxlength="50" class="box">
+         </div>
+      </div>
+      <input type="submit" name="submit" value="Update Profile" class="btn">
+   </form>
+
+   <% if (message.length > 0) { %>
+      <div class="messages">
+         <% message.forEach(msg => { %>
+            <p><%= msg %></p>
+         <% }) %>
+      </div>
+   <% } %>
+</section>
+
+<!-- Update profile section ends -->
+
+<%- include('components/footer') %>
+
+<!-- Custom JS file link  -->
+<script src="/js/script.js"></script>
+   
+</body>
+</html>

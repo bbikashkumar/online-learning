@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Profile</title>
+
+   <!-- Font Awesome CDN Link -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS File Link -->
+   <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include('components/user_header') %>
+
+<section class="profile">
+   <h1 class="heading">Profile Details</h1>
+
+   <div class="details">
+      <div class="user">
+         <img src="/uploaded_files/<%= fetchProfile.image %>" alt="">
+         <h3><%= fetchProfile.name %></h3>
+         <p>Student</p>
+         <a href="/update" class="inline-btn">Update Profile</a>
+      </div>
+
+      <div class="box-container">
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-bookmark"></i>
+               <div>
+                  <h3><%= totalBookmarked %></h3>
+                  <span>Saved Playlists</span>
+               </div>
+            </div>
+            <a href="#" class="inline-btn">View Playlists</a>
+         </div>
+
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-heart"></i>
+               <div>
+                  <h3><%= totalLikes %></h3>
+                  <span>Liked Tutorials</span>
+               </div>
+            </div>
+            <a href="#" class="inline-btn">View Liked</a>
+         </div>
+
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-comment"></i>
+               <div>
+                  <h3><%= totalComments %></h3>
+                  <span>Video Comments</span>
+               </div>
+            </div>
+            <a href="#" class="inline-btn">View Comments</a>
+         </div>
+      </div>
+   </div>
+</section>
+
+<footer class="footer">
+   &copy; copyright @ 2022 by <span>mr. web designer</span> | all rights reserved!
+</footer>
+
+<!-- Custom JS File Link -->
+<script src="/js/script.js"></script>
+</body>
+</html>

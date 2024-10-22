@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="../css/admin_style.css">
+</head>
+<body>
+
+<%- include('../views/components/admin_header.ejs'); %>
+
+<section class="contents">
+    <h1 class="heading">Contents</h1>
+    <div class="box-container">
+
+        <% if (searchResults.length > 0) { %>
+            <% searchResults.forEach(video => { %>
+                <div class="box">
+                    <div class="flex">
+                        <div>
+                            <i class="fas fa-dot-circle" style="color:<%= video.status === 'active' ? 'limegreen' : 'red' %>;"></i>
+                            <span style="color:<%= video.status === 'active' ? 'limegreen' : 'red' %>;"><%= video.status %></span>
+                        </div>
+                        <div><i class="fas fa-calendar"></i><span><%= video.date %></span></div>
+                    </div>
+                    <img src="../uploaded_files/<%= video.thumb %>" class="thumb" alt="">
+                    <h3 class="title"><%= video.title %></h3>
+                    <form action="" method="post" class="flex-btn">
+                        <input type="hidden" name="video_id" value="<%= video.id %>">
+                        <a href="update_content.ejs?get_id=<%= video.id %>" class="option-btn">Update</a>
+                        <input type="submit" value="Delete" class="delete-btn" onclick="return confirm('Delete this video?');" name="delete_video">
+                    </form>
+                    <a href="view_content.ejs?get_id=<%= video.id %>" class="btn">View Content</a>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p class="empty">No contents found!</p>
+        <% } %>
+    </div>
+</section>
+
+<section class="playlists">
+    <h1 class="heading">Playlists</h1>
+    <div class="box-container">
+        <% if (playlistResults.length > 0) { %>
+            <% playlistResults.forEach(playlist => { %>
+                <div class="box">
+                    <div class="flex">
+                        <div>
+                            <i class="fas fa-circle-dot" style="color:<%= playlist.status === 'active' ? 'limegreen' : 'red' %>;"></i>
+                            <span style="color:<%= playlist.status === 'active' ? 'limegreen' : 'red' %>;"><%= playlist.status %></span>
+                        </div>
+                        <div><i class="fas fa-calendar"></i><span><%= playlist.date %></span></div>
+                    </div>
+                    <div class="thumb">
+                        <span><%= playlist.total_videos %></span>
+                        <img src="../uploaded_files/<%= playlist.thumb %>" alt="">
+                    </div>
+                    <h3 class="title"><%= playlist.title %></h3>
+                    <p class="description"><%= playlist.description.slice(0, 100) %></p>
+                    <form action="" method="post" class="flex-btn">
+                        <input type="hidden" name="playlist_id" value="<%= playlist.id %>">
+                        <a href="update_playlist.ejs?get_id=<%= playlist.id %>" class="option-btn">Update</a>
+                        <input type="submit" value="Delete Playlist" class="delete-btn" onclick="return confirm('Delete this playlist?');" name="delete_playlist">
+                    </form>
+                    <a href="view_playlist.ejs?get_id=<%= playlist.id %>" class="btn">View Playlist</a>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p class="empty">No playlists found!</p>
+        <% } %>
+    </div>
+</section>
+
+<%- include('../views/components/footer.ejs'); %>
+
+<script src="../js/admin_script.js"></script>
+</body>
+</html>

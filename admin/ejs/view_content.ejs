@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>View Content</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <link rel="stylesheet" href="/css/admin_style.css">
+</head>
+<body>
+
+<%- include('../views/components/admin_header') %>
+
+<section class="view-content">
+   <% if (content) { %>
+      <div class="container">
+         <video src="/uploaded_files/<%= content.video %>" autoplay controls poster="/uploaded_files/<%= content.thumb %>" class="video"></video>
+         <div class="date"><i class="fas fa-calendar"></i><span><%= content.date %></span></div>
+         <h3 class="title"><%= content.title %></h3>
+         <div class="flex">
+            <div><i class="fas fa-heart"></i><span><%= totalLikes %></span></div>
+            <div><i class="fas fa-comment"></i><span><%= totalComments %></span></div>
+         </div>
+         <div class="description"><%= content.description %></div>
+         <form action="/view_content/<%= content.id %>" method="post">
+            <div class="flex-btn">
+               <input type="hidden" name="video_id" value="<%= content.id %>">
+               <a href="/update_content/<%= content.id %>" class="option-btn">Update</a>
+               <input type="submit" value="Delete" class="delete-btn" onclick="return confirm('Delete this video?');" name="delete_video">
+            </div>
+         </form>
+      </div>
+   <% } else { %>
+      <p class="empty">No content found! <a href="/add_content" class="btn" style="margin-top: 1.5rem;">Add Videos</a></p>
+   <% } %>
+</section>
+
+<section class="comments">
+   <h1 class="heading">User Comments</h1>
+   <div class="show-comments">
+      <% if (comments.length > 0) { %>
+         <% comments.forEach(comment => { %>
+            <div class="box">
+               <div class="user">
+                  <img src="/uploaded_files/<%= comment.user_image %>" alt="">
+                  <div>
+                     <h3><%= comment.user_name %></h3>
+                     <span><%= comment.date %></span>
+                  </div>
+               </div>
+               <p class="text"><%= comment.comment %></p>
+               <form action="/view_content/<%= content.id %>" method="post" class="flex-btn">
+                  <input type="hidden" name="comment_id" value="<%= comment.id %>">
+                  <button type="submit" name="delete_comment" class="inline-delete-btn" onclick="return confirm('Delete this comment?');">Delete Comment</button>
+               </form>
+            </div>
+         <% }) %>
+      <% } else { %>
+         <p class="empty">No comments added yet!</p>
+      <% } %>
+   </div>
+</section>
+
+<%- include('../views/components/footer') %>
+<script src="/js/admin_script.js"></script>
+
+</body>
+</html>

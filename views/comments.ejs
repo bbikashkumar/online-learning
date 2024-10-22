@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>User Comments</title>
+
+   <!-- Font Awesome CDN link -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- Custom CSS file link -->
+   <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+<%- include('components/user_header') %>
+
+<% if (editComment) { %>
+<section class="edit-comment">
+   <h1 class="heading">Edit Comment</h1>
+   <form action="" method="post">
+      <input type="hidden" name="update_id" value="<%= editComment.id %>">
+      <textarea name="update_box" class="box" maxlength="1000" required placeholder="Please enter your comment" cols="30" rows="10"><%= editComment.comment %></textarea>
+      <div class="flex">
+         <a href="/comments" class="inline-option-btn">Cancel Edit</a>
+         <input type="submit" value="Update Now" name="update_now" class="inline-btn">
+      </div>
+   </form>
+</section>
+<% } %>
+
+<section class="comments">
+   <h1 class="heading">Your Comments</h1>
+   <div class="show-comments">
+      <% if (comments.length > 0) { %>
+         <% comments.forEach(comment => { %>
+         <div class="box" style="<%= comment.user_id === user_id ? 'order:-1;' : '' %>">
+            <div class="content">
+               <span><%= comment.date %></span>
+               <p> - <%= comment.content.title %> - </p>
+               <a href="/watch_video?get_id=<%= comment.content.id %>">View Content</a>
+            </div>
+            <p class="text"><%= comment.comment %></p>
+            <% if (comment.user_id === user_id) { %>
+            <form action="" method="post" class="flex-btn">
+               <input type="hidden" name="comment_id" value="<%= comment.id %>">
+               <button type="submit" name="edit_comment" class="inline-option-btn">Edit Comment</button>
+               <button type="submit" name="delete_comment" class="inline-delete-btn" onclick="return confirm('Delete this comment?');">Delete Comment</button>
+            </form>
+            <% } %>
+         </div>
+         <% }); %>
+      <% } else { %>
+         <p class="empty">No comments added yet!</p>
+      <% } %>
+   </div>
+</section>
+
+<%- include('components/footer') %>
+
+<!-- Custom JS file link -->
+<script src="/js/script.js"></script>
+
+</body>
+</html>

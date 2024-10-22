@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist</title>
+
+    <!-- Font Awesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- Custom CSS File Link -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <% include components/user_header.ejs %>
+
+    <!-- Playlist Section Starts -->
+    <section class="playlist">
+        <h1 class="heading">Playlist Details</h1>
+        <div class="row">
+
+            <% if (playlist) { %>
+                <div class="col">
+                    <form action="/playlist/<%= playlist.id %>" method="post" class="save-list">
+                        <input type="hidden" name="list_id" value="<%= playlist.id %>">
+                        <% if (isBookmarked) { %>
+                            <button type="submit" name="save_list"><i class="fas fa-bookmark"></i><span>Saved</span></button>
+                        <% } else { %>
+                            <button type="submit" name="save_list"><i class="far fa-bookmark"></i><span>Save Playlist</span></button>
+                        <% } %>
+                    </form>
+                    <div class="thumb">
+                        <span><%= totalVideos %> videos</span>
+                        <img src="uploaded_files/<%= playlist.thumb %>" alt="">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="tutor">
+                        <img src="uploaded_files/<%= tutor.image %>" alt="">
+                        <div>
+                            <h3><%= tutor.name %></h3>
+                            <span><%= tutor.profession %></span>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <h3><%= playlist.title %></h3>
+                        <p><%= playlist.description %></p>
+                        <div class="date"><i class="fas fa-calendar"></i><span><%= playlist.date %></span></div>
+                    </div>
+                </div>
+            <% } else { %>
+                <p class="empty">This playlist was not found!</p>
+            <% } %>
+        </div>
+    </section>
+    <!-- Playlist Section Ends -->
+
+    <!-- Videos Container Section Starts -->
+    <section class="videos-container">
+        <h1 class="heading">Playlist Videos</h1>
+        <div class="box-container">
+            <% if (videos.length > 0) { %>
+                <% videos.forEach(video => { %>
+                    <a href="/watch_video/<%= video.id %>" class="box">
+                        <i class="fas fa-play"></i>
+                        <img src="uploaded_files/<%= video.thumb %>" alt="">
+                        <h3><%= video.title %></h3>
+                    </a>
+                <% }) %>
+            <% } else { %>
+                <p class="empty">No videos added yet!</p>
+            <% } %>
+        </div>
+    </section>
+    <!-- Videos Container Section Ends -->
+
+    <% include components/footer.ejs %>
+
+    <!-- Custom JS File Link -->
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <% include('components/user_header') %>
+
+    <section class="quick-select">
+        <h1 class="heading">Quick Options</h1>
+        <div class="box-container">
+            <% if (user_id) { %>
+            <div class="box">
+                <h3 class="title">Likes and Comments</h3>
+                <p>Total Likes: <span><%= total_likes %></span></p> <!-- Updated -->
+                <a href="/likes" class="inline-btn">View Likes</a>
+                <p>Total Comments: <span><%= total_comments %></span></p> <!-- Updated -->
+                <a href="/comments" class="inline-btn">View Comments</a>
+                <p>Saved Playlist: <span><%= total_bookmarked %></span></p> <!-- Updated -->
+                <a href="/bookmark" class="inline-btn">View Bookmark</a>
+            </div>
+            <% } else { %>
+            <div class="box" style="text-align: center;">
+                <h3 class="title">Please Login or Register</h3>
+                <div class="flex-btn" style="padding-top: .5rem;">
+                    <a href="/login" class="option-btn">Login</a>
+                    <a href="/register" class="option-btn">Register</a>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </section>
+
+    <% include('components/footer') %>
+
+    <!-- custom js file link -->
+    <script src="/js/script.js"></script>
+</body>
+</html>

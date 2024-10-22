@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Create Account</title>
+
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include('components/user_header.ejs'); %>
+
+<section class="form-container">
+   <form class="register" action="/register" method="post" enctype="multipart/form-data">
+      <h3>Create Account</h3>
+      <div class="flex">
+         <div class="col">
+            <p>Your Name <span>*</span></p>
+            <input type="text" name="name" placeholder="Enter your name" maxlength="50" required class="box">
+            <p>Your Email <span>*</span></p>
+            <input type="email" name="email" placeholder="Enter your email" maxlength="20" required class="box">
+         </div>
+         <div class="col">
+            <p>Your Password <span>*</span></p>
+            <input type="password" name="pass" placeholder="Enter your password" maxlength="20" required class="box">
+            <p>Confirm Password <span>*</span></p>
+            <input type="password" name="cpass" placeholder="Confirm your password" maxlength="20" required class="box">
+         </div>
+      </div>
+      <p>Select Picture <span>*</span></p>
+      <input type="file" name="image" accept="image/*" required class="box">
+      <p class="link">Already have an account? <a href="/login">Login now</a></p>
+      <input type="submit" name="submit" value="Register Now" class="btn">
+   </form>
+</section>
+
+<%- include('components/footer.ejs'); %>
+
+<!-- custom js file link  -->
+<script src="/js/script.js"></script>
+</body>
+</html>

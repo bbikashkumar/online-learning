@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Profile</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <link rel="stylesheet" href="/css/admin_style.css">
+</head>
+<body>
+
+<%- include('../views/components/admin_header') %>
+
+<section class="tutor-profile" style="min-height: calc(100vh - 19rem);"> 
+   <h1 class="heading">Profile Details</h1>
+   <div class="details">
+      <div class="tutor">
+         <img src="/uploaded_files/<%= profile.image %>" alt="">
+         <h3><%= profile.name %></h3>
+         <span><%= profile.profession %></span>
+         <a href="/update" class="inline-btn">Update Profile</a>
+      </div>
+      <div class="flex">
+         <div class="box">
+            <span><%= total_playlists %></span>
+            <p>Total Playlists</p>
+            <a href="/playlists" class="btn">View Playlists</a>
+         </div>
+         <div class="box">
+            <span><%= total_contents %></span>
+            <p>Total Videos</p>
+            <a href="/contents" class="btn">View Contents</a>
+         </div>
+         <div class="box">
+            <span><%= total_likes %></span>
+            <p>Total Likes</p>
+            <a href="/contents" class="btn">View Contents</a>
+         </div>
+         <div class="box">
+            <span><%= total_comments %></span>
+            <p>Total Comments</p>
+            <a href="/comments" class="btn">View Comments</a>
+         </div>
+      </div>
+   </div>
+</section>
+
+<%- include('../views/components/footer') %>
+<script src="/js/admin_script.js"></script>
+
+</body>
+</html>

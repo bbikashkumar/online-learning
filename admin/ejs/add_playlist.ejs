@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Playlist</title>
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/admin_style.css">
+</head>
+<body>
+
+    <!-- Admin header -->
+    <% include ../components/admin_header %>
+
+    <section class="playlist-form">
+        <h1 class="heading">Create Playlist</h1>
+
+        <form action="/admin/add_playlist" method="POST" enctype="multipart/form-data">
+            <p>Playlist Status <span>*</span></p>
+            <select name="status" class="box" required>
+                <option value="" disabled selected>-- Select Status --</option>
+                <option value="active">Active</option>
+                <option value="deactive">Deactive</option>
+            </select>
+
+            <p>Playlist Title <span>*</span></p>
+            <input type="text" name="title" maxlength="100" required placeholder="Enter playlist title" class="box">
+
+            <p>Playlist Description <span>*</span></p>
+            <textarea name="description" class="box" required placeholder="Write description" maxlength="1000" cols="30" rows="10"></textarea>
+
+            <p>Playlist Thumbnail <span>*</span></p>
+            <input type="file" name="image" accept="image/*" required class="box">
+
+            <input type="submit" value="Create Playlist" class="btn">
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <% include ../components/footer %>
+
+    <!-- Custom Script -->
+    <script src="/js/admin_script.js"></script>
+
+</body>
+</html>

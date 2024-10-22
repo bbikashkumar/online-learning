@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Update Profile</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <link rel="stylesheet" href="/css/admin_style.css">
+</head>
+<body>
+
+<%- include('../views/components/admin_header') %>
+
+<section class="form-container" style="min-height: calc(100vh - 19rem);">
+   <form class="register" action="/update_profile" method="post" enctype="multipart/form-data">
+      <h3>Update Profile</h3>
+      <div class="flex">
+         <div class="col">
+            <p>Your Name</p>
+            <input type="text" name="name" placeholder="<%= tutor.name %>" maxlength="50" class="box">
+            <p>Your Profession</p>
+            <select name="profession" class="box">
+               <option value="" selected><%= tutor.profession %></option>
+               <option value="developer">Developer</option>
+               <option value="designer">Designer</option>
+               <option value="musician">Musician</option>
+               <option value="biologist">Biologist</option>
+               <option value="teacher">Teacher</option>
+               <option value="engineer">Engineer</option>
+               <option value="lawyer">Lawyer</option>
+               <option value="accountant">Accountant</option>
+               <option value="doctor">Doctor</option>
+               <option value="journalist">Journalist</option>
+               <option value="photographer">Photographer</option>
+            </select>
+            <p>Your Email</p>
+            <input type="email" name="email" placeholder="<%= tutor.email %>" maxlength="20" class="box">
+         </div>
+         <div class="col">
+            <p>Old Password:</p>
+            <input type="password" name="old_pass" placeholder="Enter your old password" maxlength="20" class="box">
+            <p>New Password:</p>
+            <input type="password" name="new_pass" placeholder="Enter your new password" maxlength="20" class="box">
+            <p>Confirm Password:</p>
+            <input type="password" name="cpass" placeholder="Confirm your new password" maxlength="20" class="box">
+         </div>
+      </div>
+      <p>Update Picture:</p>
+      <input type="file" name="image" accept="image/*" class="box">
+      <input type="submit" name="submit" value="Update Now" class="btn">
+   </form>
+</section>
+
+<%- include('../views/components/footer') %>
+<script src="/js/admin_script.js"></script>
+</body>
+</html>

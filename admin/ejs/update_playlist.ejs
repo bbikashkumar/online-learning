@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Update Playlist</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <link rel="stylesheet" href="/css/admin_style.css">
+</head>
+<body>
+
+<%- include('../views/components/admin_header') %>
+
+<section class="playlist-form">
+   <h1 class="heading">Update Playlist</h1>
+
+   <% if (playlist) { %>
+      <form action="/update_playlist/<%= playlist.id %>" method="post" enctype="multipart/form-data">
+         <input type="hidden" name="old_image" value="<%= playlist.thumb %>">
+         <p>Playlist Status <span>*</span></p>
+         <select name="status" class="box" required>
+            <option value="<%= playlist.status %>" selected><%= playlist.status %></option>
+            <option value="active">Active</option>
+            <option value="deactive">Deactive</option>
+         </select>
+         <p>Playlist Title <span>*</span></p>
+         <input type="text" name="title" maxlength="100" required placeholder="Enter playlist title" value="<%= playlist.title %>" class="box">
+         <p>Playlist Description <span>*</span></p>
+         <textarea name="description" class="box" required placeholder="Write description" maxlength="1000" cols="30" rows="10"><%= playlist.description %></textarea>
+         <p>Playlist Thumbnail <span>*</span></p>
+         <div class="thumb">
+            <span><%= totalVideos %></span>
+            <img src="/uploaded_files/<%= playlist.thumb %>" alt="">
+         </div>
+         <input type="file" name="image" accept="image/*" class="box">
+         <input type="submit" value="Update Playlist" name="submit" class="btn">
+         <div class="flex-btn">
+            <input type="submit" value="Delete" class="delete-btn" onclick="return confirm('Delete this playlist?');" name="delete">
+            <a href="/view_playlist/<%= playlist.id %>" class="option-btn">View Playlist</a>
+         </div>
+      </form>
+   <% } else { %>
+      <p class="empty">No playlist added yet!</p>
+   <% } %>
+</section>
+
+<%- include('../views/components/footer') %>
+<script src="/js/admin_script.js"></script>
+</body>
+</html>

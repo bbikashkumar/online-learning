@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+
+    <!-- Font Awesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- Custom CSS File Link -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <%- include('components/user_header.ejs') %>
+
+    <!-- Courses Section Starts -->
+    <section class="courses">
+        <h1 class="heading">All Courses</h1>
+
+        <div class="box-container">
+            <% if (courses.length > 0) { %>
+                <% courses.forEach(course => { %>
+                    <div class="box">
+                        <div class="tutor">
+                            <img src="/uploaded_files/<%= course.tutor.image %>" alt="">
+                            <div>
+                                <h3><%= course.tutor.name %></h3>
+                                <span><%= course.date %></span>
+                            </div>
+                        </div>
+                        <img src="/uploaded_files/<%= course.thumb %>" class="thumb" alt="">
+                        <h3 class="title"><%= course.title %></h3>
+                        <a href="/playlist?get_id=<%= course.id %>" class="inline-btn">View Playlist</a>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p class="empty">No courses added yet!</p>
+            <% } %>
+        </div>
+    </section>
+    <!-- Courses Section Ends -->
+
+    <%- include('components/footer.ejs') %>  
+
+    <!-- Custom JS File Link -->
+    <script src="/js/script.js"></script>
+</body>
+</html>
