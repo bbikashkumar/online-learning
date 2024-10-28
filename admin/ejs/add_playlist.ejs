@@ -15,12 +15,12 @@
 <body>
 
     <!-- Admin header -->
-    <% include ../components/admin_header %>
+    <%- include('../../views/components/admin_header', { message: message, profile: profile }); %>
 
     <section class="playlist-form">
         <h1 class="heading">Create Playlist</h1>
 
-        <form action="/admin/add_playlist" method="POST" enctype="multipart/form-data">
+        <form action="/admin/add-playlist" method="POST" >
             <p>Playlist Status <span>*</span></p>
             <select name="status" class="box" required>
                 <option value="" disabled selected>-- Select Status --</option>
@@ -35,14 +35,14 @@
             <textarea name="description" class="box" required placeholder="Write description" maxlength="1000" cols="30" rows="10"></textarea>
 
             <p>Playlist Thumbnail <span>*</span></p>
-            <input type="file" name="image" accept="image/*" required class="box">
+            <input type="file" name="image"  required class="box">
 
             <input type="submit" value="Create Playlist" class="btn">
         </form>
     </section>
 
     <!-- Footer -->
-    <% include ../components/footer %>
+    <%- include('../../views/components/footer') %>
 
     <!-- Custom Script -->
     <script src="/js/admin_script.js"></script>

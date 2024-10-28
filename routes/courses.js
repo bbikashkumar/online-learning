@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 
     try {
         const [courses] = await db.query(`
-            SELECT p.*, t.image, t.name
+            SELECT p.*, t.name
             FROM playlist p
             JOIN tutors t ON p.tutor_id = t.id
             WHERE p.status = ?

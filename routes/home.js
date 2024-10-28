@@ -1,52 +1,53 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db'); // Import the DB connection
+const db = require('../config/db');
 
-// Home route
-router.get('/', (req, res) => {
-  let user_id = req.cookies['user_id'] || '';
-  let total_likes = 0, total_comments = 0, total_bookmarked = 0;
-  let courses = [], tutors = [];
+// Route to fetch home page data
+router.get('/home', async (req, res) => {
+    // Retrieve user_id from the session if logged in, else check cookies as a fallback
+    const user_id = req.session.user_id || req.cookies['user_id'] || ''; 
+    let total_likes = 0, total_comments = 0, total_bookmarked = 0;
+    let courses = [], tutors = [];
 
-  if (user_id !== '') {
-    // Fetch likes, comments, bookmarks if user is logged in
-    db.query('SELECT COUNT(*) AS total_likes FROM `likes` WHERE user_id = ?', [user_id], (err, result) => {
-      if (err) throw err;
-      total_likes = result[0].total_likes;
+    try {
+        if (user_id) {
+            // Retrieve counts for likes, comments, and bookmarks for the logged-in user
+            const [likesResult] = await db.query('SELECT COUNT(*) AS total_likes FROM `likes` WHERE user_id = ?', [user_id]);
+            const [commentsResult] = await db.query('SELECT COUNT(*) AS total_comments FROM `comments` WHERE user_id = ?', [user_id]);
+            const [bookmarkResult] = await db.query('SELECT COUNT(*) AS total_bookmarked FROM `bookmark` WHERE user_id = ?', [user_id]);
 
-      db.query('SELECT COUNT(*) AS total_comments FROM `comments` WHERE user_id = ?', [user_id], (err, result) => {
-        if (err) throw err;
-        total_comments = result[0].total_comments;
+            total_likes = likesResult.total_likes;
+            total_comments = commentsResult.total_comments;
+            total_bookmarked = bookmarkResult.total_bookmarked;
+        }
 
-        db.query('SELECT COUNT(*) AS total_bookmarked FROM `bookmark` WHERE user_id = ?', [user_id], (err, result) => {
-          if (err) throw err;
-          total_bookmarked = result[0].total_bookmarked;
+        // Fetch active courses, limited to the latest 6
+        const sqlCourses = "SELECT * FROM `playlist` WHERE status = 'active' ORDER BY date DESC LIMIT 6";
+        const [activeCourses] = await db.query(sqlCourses);
+        courses = activeCourses || []; // Set an empty array if no active courses are found
 
-          // Fetch latest courses
-          db.query('SELECT * FROM `playlist` WHERE status = ? ORDER BY date DESC LIMIT 6', ['active'], (err, coursesResult) => {
-            if (err) throw err;
-            courses = coursesResult;
+        // Retrieve tutor information for each course
+        const fetchTutorsPromises = courses.map(course => 
+            db.query('SELECT * FROM `tutors` WHERE id = ?', [course.tutor_id])
+                .then(tutorResult => tutorResult[0] || null) // Set to null if no tutor is found
+        );
 
-            const fetchTutorsPromises = courses.map(course =>
-              new Promise((resolve, reject) => {
-                db.query('SELECT * FROM `tutors` WHERE id = ?', [course.tutor_id], (err, tutorResult) => {
-                  if (err) reject(err);
-                  resolve(tutorResult[0]);
-                });
-              })
-            );
+        tutors = await Promise.all(fetchTutorsPromises);
 
-            Promise.all(fetchTutorsPromises).then(tutorsResult => {
-              tutors = tutorsResult;
-              res.render('home', { user_id, total_likes, total_comments, total_bookmarked, courses, tutors });
-            }).catch(err => console.error(err));
-          });
+        // Render the home page with the fetched data
+        res.render('home', { 
+            courses, 
+            user_id, 
+            total_likes, 
+            total_comments, 
+            total_bookmarked, 
+            tutors 
         });
-      });
-    });
-  } else {
-    res.render('home', { user_id, total_likes, total_comments, total_bookmarked, courses, tutors });
-  }
+        
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send("An error occurred while fetching data.");
+    }
 });
 
 module.exports = router;

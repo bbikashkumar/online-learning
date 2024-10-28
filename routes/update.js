@@ -6,10 +6,10 @@ const fileUpload = require('express-fileupload');
 const router = express.Router();
 
 // Middleware to handle file uploads
-router.use(fileUpload());
+router.use(fileUpload()); // You can remove this line if you don't need file uploads at all
 
 // Route to render the update profile form
-router.get('/update', async (req, res) => {
+router.get('/', async (req, res) => {
     const user_id = req.cookies.user_id;
     if (!user_id) {
         return res.redirect('/login');
@@ -17,7 +17,7 @@ router.get('/update', async (req, res) => {
 
     try {
         const [user] = await db.query("SELECT * FROM `users` WHERE id = ? LIMIT 1", [user_id]);
-        res.render('updateProfile', { message: [], fetch_profile: user });
+        res.render('update', { message: [], fetch_profile: user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
@@ -25,7 +25,7 @@ router.get('/update', async (req, res) => {
 });
 
 // Route to handle the profile update logic
-router.post('/update', async (req, res) => {
+router.post('/', async (req, res) => {
     const user_id = req.cookies.user_id;
 
     if (!user_id) {
@@ -58,25 +58,10 @@ router.post('/update', async (req, res) => {
             }
         }
 
-        // Image upload handling
-        if (req.files && req.files.image) {
-            const image = req.files.image;
-            const imageSize = image.size;
-            const ext = image.name.split('.').pop();
-            const rename = `${user_id}.${ext}`;
-            const imageFolder = `uploaded_files/${rename}`;
-
-            if (imageSize > 2000000) {
-                message.push('Image size too large!');
-            } else {
-                await db.query("UPDATE `users` SET `image` = ? WHERE id = ?", [rename, user_id]);
-                image.mv(imageFolder);
-                message.push('Image updated successfully!');
-            }
-        }
-
         // Password update handling
         const { old_pass, new_pass, cpass } = req.body;
+
+        // Compare the old password directly
         const prev_pass = user.password;
 
         if (old_pass && new_pass && cpass) {
@@ -85,12 +70,13 @@ router.post('/update', async (req, res) => {
             } else if (new_pass !== cpass) {
                 message.push('Confirm password not matched!');
             } else {
+                // Update the password directly
                 await db.query("UPDATE `users` SET password = ? WHERE id = ?", [new_pass, user_id]);
                 message.push('Password updated successfully!');
             }
         }
 
-        res.render('updateProfile', { message, fetch_profile: user });
+        res.render('update', { message, fetch_profile: user });
 
     } catch (error) {
         console.error(error);

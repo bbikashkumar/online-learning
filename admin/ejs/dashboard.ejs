@@ -15,7 +15,8 @@
 </head>
 <body>
 
-<%- include('components/admin_header'); %>
+    <%- include('../../views/components/admin_header', { message: message, profile: profile }); %>
+
 
 <section class="dashboard">
 
@@ -25,32 +26,32 @@
 
         <div class="box">
             <h3>welcome!</h3>
-            <p><%= fetch_profile.name %></p>
-            <a href="/profile" class="btn">view profile</a>
+            <p><%= profile.name %></p>
+            <a href="/admin/profile" class="btn">view profile</a>
         </div>
 
         <div class="box">
             <h3><%= totalContents %></h3>
             <p>total contents</p>
-            <a href="/add_content" class="btn">add new content</a>
+            <a href="/admin/contents" class="btn">add new content</a>
         </div>
 
         <div class="box">
             <h3><%= totalPlaylists %></h3>
             <p>total playlists</p>
-            <a href="/add_playlist" class="btn">add new playlist</a>
+            <a href="/admin/add-playlist" class="btn">add new playlist</a>
         </div>
 
         <div class="box">
             <h3><%= totalLikes %></h3>
             <p>total likes</p>
-            <a href="/contents" class="btn">view contents</a>
+            <a href="/admin/contents" class="btn">view contents</a>
         </div>
 
         <div class="box">
             <h3><%= totalComments %></h3>
             <p>total comments</p>
-            <a href="/comments" class="btn">view comments</a>
+            <a href="/admin/comments" class="btn">view comments</a>
         </div>
 
         <div class="box">
@@ -66,7 +67,7 @@
 
 </section>
 
-<%- include('components/footer'); %>
+<%- include('../../views/components/footer'); %>
 
 <script src="/js/admin_script.js"></script>
 

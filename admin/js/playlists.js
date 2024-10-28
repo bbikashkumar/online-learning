@@ -13,18 +13,25 @@ router.use((req, res, next) => {
 });
 
 // Fetch playlists for the logged-in tutor
-router.get('/playlists', async (req, res) => {
+router.get('/', async (req, res) => {
     const tutor_id = req.cookies.tutor_id;
+    const message = []; // Initialize message variable
+
     try {
+        // Fetch playlists
         const [playlists] = await db.execute('SELECT * FROM playlist WHERE tutor_id = ? ORDER BY date DESC', [tutor_id]);
-        
+
         // Count videos for each playlist
         for (const playlist of playlists) {
             const [videos] = await db.execute('SELECT * FROM content WHERE playlist_id = ?', [playlist.id]);
             playlist.videoCount = videos.length;
         }
 
-        res.render('admin/playlists', { playlists });
+        // Fetch profile data
+        const [profileData] = await db.execute('SELECT * FROM tutors WHERE id = ?', [tutor_id]);
+        const profile = profileData[0] || {};
+
+        res.render('playlists', { playlists, message, profile });
     } catch (error) {
         console.error(error);
         res.send('Error loading playlists');
@@ -40,13 +47,16 @@ router.post('/delete_playlist', async (req, res) => {
         if (playlist.length > 0) {
             const playlistData = playlist[0];
             const thumbPath = path.join(__dirname, '../uploaded_files/', playlistData.thumb);
-            // Delete thumbnail from the file system
+            
+            // Delete thumbnail from the file system if it exists
             if (fs.existsSync(thumbPath)) {
                 fs.unlinkSync(thumbPath);
             }
+
             // Delete associated bookmarks and the playlist
             await db.execute('DELETE FROM bookmark WHERE playlist_id = ?', [playlist_id]);
             await db.execute('DELETE FROM playlist WHERE id = ?', [playlist_id]);
+
             res.redirect('/playlists');
         } else {
             res.redirect('/playlists');

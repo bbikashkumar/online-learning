@@ -22,7 +22,7 @@
 
             <% if (playlist) { %>
                 <div class="col">
-                    <form action="/playlist/<%= playlist.id %>" method="post" class="save-list">
+                    <form action="/playlist" method="post" class="save-list">
                         <input type="hidden" name="list_id" value="<%= playlist.id %>">
                         <% if (isBookmarked) { %>
                             <button type="submit" name="save_list"><i class="fas fa-bookmark"></i><span>Saved</span></button>

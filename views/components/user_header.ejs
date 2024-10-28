@@ -34,4 +34,17 @@
       <a href="/contact"><i class="fas fa-headset"></i><span>contact us</span></a>
     </nav>
   </div>
-  
+  <!-- <script src="../../routes/user_header.js"></script> -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select the user button
+        const userButton = document.getElementById('user-btn');
+
+        // Add click event listener
+        userButton.addEventListener('click', function() {
+            // Redirect to the profile page
+            console.log('User button clicked'); // Debugging line
+            window.location.href = '/profile';
+        });
+    });
+</script>

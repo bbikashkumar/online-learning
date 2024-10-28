@@ -14,27 +14,36 @@
 </head>
 <body>
 
-<%- include('components/user_header.ejs'); %>
+   <%- include('components/user_header.ejs', { messages: messages }); %>
+
+   <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(message => { %>
+         <div class="message form">
+            <span><%= message %></span>
+            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+         </div>
+      <% }) %>
+   <% } %>
 
 <section class="form-container">
-   <form class="register" action="/register" method="post" enctype="multipart/form-data">
+   <form class="register" action="/register" method="post" >
       <h3>Create Account</h3>
       <div class="flex">
          <div class="col">
             <p>Your Name <span>*</span></p>
             <input type="text" name="name" placeholder="Enter your name" maxlength="50" required class="box">
             <p>Your Email <span>*</span></p>
-            <input type="email" name="email" placeholder="Enter your email" maxlength="20" required class="box">
+            <input type="email" name="email" placeholder="Enter your email" maxlength="50" required class="box">
          </div>
          <div class="col">
             <p>Your Password <span>*</span></p>
-            <input type="password" name="pass" placeholder="Enter your password" maxlength="20" required class="box">
+            <input type="password" name="pass" placeholder="Enter your password" minlength="8" maxlength="20" required class="box">
             <p>Confirm Password <span>*</span></p>
-            <input type="password" name="cpass" placeholder="Confirm your password" maxlength="20" required class="box">
+            <input type="password" name="cpass" placeholder="Confirm your password" minlength="8" maxlength="20" required class="box">
          </div>
       </div>
-      <p>Select Picture <span>*</span></p>
-      <input type="file" name="image" accept="image/*" required class="box">
+      <!-- <p>Select Picture <span>*</span></p>
+      <input type="file" name="image" accept="image/*" required class="box"> -->
       <p class="link">Already have an account? <a href="/login">Login now</a></p>
       <input type="submit" name="submit" value="Register Now" class="btn">
    </form>

@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<%- include('../views/components/admin_header') %>
+<%- include('../../views/components/admin_header',{ message: message }) %>
 
 <section class="tutor-profile" style="min-height: calc(100vh - 19rem);"> 
    <h1 class="heading">Profile Details</h1>
@@ -46,7 +46,7 @@
    </div>
 </section>
 
-<%- include('../views/components/footer') %>
+<%- include('../../views/components/footer') %>
 <script src="/js/admin_script.js"></script>
 
 </body>

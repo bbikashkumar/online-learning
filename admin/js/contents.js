@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../config/db'); // Import your db connection
+const fs = require('fs'); // Import fs module if needed for file handling
 
 // Middleware to check if tutor is logged in
 const isLoggedIn = (req, res, next) => {
@@ -11,11 +12,17 @@ const isLoggedIn = (req, res, next) => {
 };
 
 // Route to display contents
-router.get('/contents', isLoggedIn, async (req, res) => {
+router.get('/', isLoggedIn, async (req, res) => {
     const tutor_id = req.cookies.tutor_id;
+    const message = []; // Initialize message variable
     try {
         const [contents] = await db.execute("SELECT * FROM `content` WHERE tutor_id = ? ORDER BY date DESC", [tutor_id]);
-        res.render('admin/contents', { contents });
+
+        // Assuming profile data is also needed for header or other components
+        const [profileData] = await db.execute('SELECT * FROM tutors WHERE id = ?', [tutor_id]);
+        const profile = profileData[0] || {};
+
+        res.render('contents', { contents, message, profile });
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
@@ -30,7 +37,7 @@ router.post('/delete_video', isLoggedIn, async (req, res) => {
         if (video.length > 0) {
             const videoData = video[0];
             
-            // Delete files
+            // Delete files if they exist
             if (videoData.thumb) {
                 fs.unlinkSync(`./uploaded_files/${videoData.thumb}`);
             }
@@ -45,9 +52,9 @@ router.post('/delete_video', isLoggedIn, async (req, res) => {
             // Delete the content itself
             await db.execute("DELETE FROM `content` WHERE id = ?", [video_id]);
 
-            res.redirect('/contents');
+            res.redirect('/admin/contents');
         } else {
-            res.redirect('/contents');
+            res.redirect('/admin/contents');
         }
     } catch (err) {
         console.error(err);

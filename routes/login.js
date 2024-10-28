@@ -1,43 +1,66 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db'); // Adjust the path based on your project structure
-const sha1 = require('sha1'); // For hashing passwords
+const db = require('../config/db'); // Adjust path based on your project structure
+const cookieParser = require('cookie-parser'); // Include cookie parser
+const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
 // Middleware to check for logged-in users
-const checkUserLoggedIn = (req, res, next) => {
-    if (req.cookies.user_id) {
-        return res.redirect('/home');
-    }
-    next();
-};
+// const checkUserLoggedIn = (req, res, next) => {
+//     if (req.cookies.user_id) {
+//         return res.redirect('/home');
+//     }
+//     next();
+// };
 
-// Use the checkUserLoggedIn middleware for this route
-router.use(checkUserLoggedIn);
+// Ensure cookie parsing middleware is applied globally
+router.use(cookieParser());
+// router.use(checkUserLoggedIn);
 
-// Route to render login page
+console.log("i am in the get");
+// Route to render the login page
 router.get('/', (req, res) => {
-    res.render('login');
+    res.render('login', { message: null }); // Render without messages initially
 });
 
 // Route to handle login form submission
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
+    console.log("Form submitted:", req.body);
     const email = req.body.email.trim();
-    const pass = sha1(req.body.pass); // Hash the password
+    const password = req.body.pass; // Assume this is the plain text password
 
     try {
-        const [user] = await db.query("SELECT * FROM `users` WHERE email = ? AND password = ? LIMIT 1", [email, pass]);
+        const [rows] = await db.query("SELECT * FROM `users` WHERE email = ? LIMIT 1", [email]);
+
+        console.log("User found:", rows);
         
-        if (user.length > 0) {
-            res.cookie('user_id', user[0].id, { maxAge: 60 * 60 * 24 * 30 * 1000, httpOnly: true });
-            return res.redirect('/home');
-        } else {
-            req.flash('message', 'Incorrect email or password!');
-            return res.redirect('/login');
+        if (rows.length > 0) {
+            const user = rows[0];
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            console.log("Password match:", isMatch);
+
+            if (isMatch) {
+                console.log('Login successful, attempting to redirect...');
+                
+                res.cookie('user_id', user.id, {
+                    maxAge: 60 * 60 * 24 * 30 * 1000,
+                    httpOnly: true,
+                    secure: false // Set to true if using HTTPS
+                });
+                
+                console.log('Redirecting to home...');
+                return res.redirect('/'); // Redirect to home page
+            }
         }
+
+        console.log('Incorrect email or password');
+        return res.render('login', { message: 'Incorrect email or password!' });
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Internal server error');
     }
 });
+
+
 
 module.exports = router;

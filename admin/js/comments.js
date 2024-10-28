@@ -11,7 +11,8 @@ router.use((req, res, next) => {
 });
 
 // Fetch comments for the logged-in tutor
-router.get('/comments', async (req, res) => {
+// Fetch comments for the logged-in tutor
+router.get('/', async (req, res) => {
     try {
         const tutor_id = req.cookies.tutor_id;
         const [comments] = await db.execute('SELECT * FROM comments WHERE tutor_id = ?', [tutor_id]);
@@ -21,12 +22,19 @@ router.get('/comments', async (req, res) => {
             comment.content_title = content[0] ? content[0].title : 'Unknown';
         }
 
-        res.render('admin/comments', { comments, tutor_id });
+        // Add default values for `message` and `profile` if they are needed in the template
+        const message = []; // Define any messages you need to display
+       // Assuming profile data is also needed for header or other components
+       const [profileData] = await db.execute('SELECT * FROM tutors WHERE id = ?', [tutor_id]);
+       const profile = profileData[0] || {};
+
+        res.render('comments', { comments, tutor_id, message , profile});
     } catch (error) {
         console.error(error);
         res.send('Error loading comments');
     }
 });
+
 
 // Delete a comment
 router.post('/delete_comment', async (req, res) => {

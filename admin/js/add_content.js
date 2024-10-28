@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const connection = require('../../config/db'); // DB connection
+const db = require('../../config/db'); // DB connection
 
 // File upload configuration
 const storage = multer.diskStorage({
@@ -24,6 +24,22 @@ const upload = multer({
     { name: 'video', maxCount: 1 }
 ]);
 
+router.get('/', async (req, res) => {
+    const tutor_id = req.cookies.tutor_id; // Move inside the route
+    if (tutor_id) {
+        const message = [];
+        const [profileData] = await db.execute('SELECT * FROM tutors WHERE id = ?', [tutor_id]);
+        const profile = profileData[0] || {};
+
+        // Fetch playlists associated with the tutor
+        const [playlistData] = await db.execute('SELECT * FROM playlist WHERE tutor_id = ?', [tutor_id]);
+        const playlists = playlistData || [];
+
+        res.render('add_content', { tutor_id, message, profile, playlists });
+    } else {
+        res.redirect('/admin/login');
+    }
+});
 // Route to handle content upload
 router.post('/add_content', (req, res) => {
     const tutor_id = req.cookies.tutor_id || '';

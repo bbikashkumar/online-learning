@@ -17,7 +17,7 @@
 <%- include('components/user_header') %>
 
 <section class="form-container" style="min-height: calc(100vh - 19rem);">
-   <form action="/update" method="post" enctype="multipart/form-data">
+   <form action="/update" method="post">
       <h3>Update Profile</h3>
       <div class="flex">
          <div class="col">
@@ -25,8 +25,8 @@
             <input type="text" name="name" placeholder="<%= fetch_profile.name %>" maxlength="100" class="box">
             <p>Your Email</p>
             <input type="email" name="email" placeholder="<%= fetch_profile.email %>" maxlength="100" class="box">
-            <p>Update Picture</p>
-            <input type="file" name="image" accept="image/*" class="box">
+            <!-- <p>Update Picture</p>
+            <input type="file" name="image" accept="image/*" class="box"> -->
          </div>
          <div class="col">
             <p>Old Password</p>
@@ -41,12 +41,13 @@
    </form>
 
    <% if (message.length > 0) { %>
-      <div class="messages">
+      <div class="messages <%= message[0].type %>"> <!-- Add type class based on the message type -->
          <% message.forEach(msg => { %>
-            <p><%= msg %></p>
+            <p><%= msg.text %></p> <!-- Assuming message is an object with text and type properties -->
          <% }) %>
       </div>
    <% } %>
+   
 </section>
 
 <!-- Update profile section ends -->

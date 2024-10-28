@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<%- include('../views/components/admin_header') %>
+   <%- include('../../views/components/admin_header', { message: message, profile: profile }); %>
 
 <section class="playlists">
    <h1 class="heading">Added Playlists</h1>
@@ -18,7 +18,7 @@
    <div class="box-container">
       <div class="box" style="text-align: center;">
          <h3 class="title" style="margin-bottom: .5rem;">Create New Playlist</h3>
-         <a href="/add_playlist" class="btn">Add Playlist</a>
+         <a href="/admin/add-playlist" class="btn">Add Playlist</a>
       </div>
 
       <% if (playlists && playlists.length > 0) { %>
@@ -53,7 +53,7 @@
    </div>
 </section>
 
-<%- include('../views/components/footer') %>
+<%- include('../../views/components/footer'); %>
 
 <script src="/js/admin_script.js"></script>
 </body>

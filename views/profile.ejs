@@ -21,23 +21,26 @@
 
    <div class="details">
       <div class="user">
-         <img src="/uploaded_files/<%= fetchProfile.image %>" alt="">
+         <img src="/uploaded_files/<%= fetchProfile.image %>" alt="<%= fetchProfile.name %>'s profile picture">
          <h3><%= fetchProfile.name %></h3>
          <p>Student</p>
          <a href="/update" class="inline-btn">Update Profile</a>
       </div>
 
-      <div class="box-container">
-         <div class="box">
-            <div class="flex">
-               <i class="fas fa-bookmark"></i>
-               <div>
-                  <h3><%= totalBookmarked %></h3>
-                  <span>Saved Playlists</span>
-               </div>
-            </div>
-            <a href="#" class="inline-btn">View Playlists</a>
+      <div class="box">
+         <div class="flex">
+             <i class="fas fa-bookmark"></i>
+             <div>
+                 <h3><%= totalBookmarked %></h3>
+                 <span>Saved Playlists</span>
+             </div>
          </div>
+         <% if (playlistId) { %>
+             <a href="/playlist/<%= playlistId %>" class="inline-btn">View Playlists</a>
+         <% } else { %>
+             <span class="inline-btn disabled">No Playlists Saved</span>
+         <% } %>
+     </div>
 
          <div class="box">
             <div class="flex">

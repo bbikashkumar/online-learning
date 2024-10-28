@@ -15,29 +15,30 @@ const checkUserLoggedIn = (req, res, next) => {
 router.use(checkUserLoggedIn);
 
 // Route to render the playlist page
-router.get('/:id', async (req, res) => {
-    const user_id = req.cookies.user_id;
-    const playlistId = req.params.id;
+// Route to render the profile page
+router.get('/', async (req, res) => {
+    const user_id = req.cookies.user_id; // Get user ID from cookies/session
 
     try {
-        const [playlist] = await db.query("SELECT * FROM `playlist` WHERE id = ? AND status = ? LIMIT 1", [playlistId, 'active']);
-        
-        if (playlist.length === 0) {
-            return res.render('playlist', { playlist: null, videos: [], isBookmarked: false });
-        }
+        // Fetch user's profile
+        const [fetchProfile] = await db.query("SELECT * FROM `users` WHERE id = ? LIMIT 1", [user_id]);
 
-        const totalVideos = await db.query("SELECT COUNT(*) as count FROM `content` WHERE playlist_id = ?", [playlistId]);
-        const [tutor] = await db.query("SELECT * FROM `tutors` WHERE id = ? LIMIT 1", [playlist[0].tutor_id]);
-        const [bookmarked] = await db.query("SELECT * FROM `bookmark` WHERE user_id = ? AND playlist_id = ?", [user_id, playlistId]);
-        
-        const videos = await db.query("SELECT * FROM `content` WHERE playlist_id = ? AND status = ? ORDER BY date DESC", [playlistId, 'active']);
+        // Get total bookmarked playlists (example query)
+        const [bookmarkedPlaylists] = await db.query("SELECT COUNT(*) as count FROM `bookmark` WHERE user_id = ?", [user_id]);
 
-        res.render('playlist', {
-            playlist: playlist[0],
-            totalVideos: totalVideos[0].count,
-            tutor: tutor[0],
-            videos,
-            isBookmarked: bookmarked.length > 0,
+        // Get playlist IDs from bookmarks
+        const [playlists] = await db.query("SELECT playlist_id FROM `bookmark` WHERE user_id = ?", [user_id]);
+
+        // Check if playlists are available and get the first one if exists
+        const playlistId = playlists.length > 0 ? playlists[0].playlist_id : null;
+
+        // Pass the necessary data to the EJS template
+        res.render('profile', {
+            fetchProfile: fetchProfile[0], // User profile data
+            totalBookmarked: bookmarkedPlaylists[0].count,
+            totalLikes: 0, // Replace with actual count
+            totalComments: 0, // Replace with actual count
+            playlistId // This will be null if no playlists found
         });
     } catch (error) {
         console.error('Database error:', error);
@@ -45,26 +46,25 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
 // Route to handle saving/removing a bookmark
-router.post('/:id', async (req, res) => {
+router.post('/:id/bookmark', async (req, res) => {
     const user_id = req.cookies.user_id;
-    const playlistId = req.params.id;
+    const playlistId = req.params.id; // Use playlistId directly from params
 
     if (!user_id) {
         req.flash('message', 'Please login first!');
         return res.redirect(`/playlist/${playlistId}`);
     }
 
-    const list_id = req.body.list_id;
-
     try {
-        const [bookmarked] = await db.query("SELECT * FROM `bookmark` WHERE user_id = ? AND playlist_id = ?", [user_id, list_id]);
+        const [bookmarked] = await db.query("SELECT * FROM `bookmark` WHERE user_id = ? AND playlist_id = ?", [user_id, playlistId]);
         
         if (bookmarked.length > 0) {
-            await db.query("DELETE FROM `bookmark` WHERE user_id = ? AND playlist_id = ?", [user_id, list_id]);
+            await db.query("DELETE FROM `bookmark` WHERE user_id = ? AND playlist_id = ?", [user_id, playlistId]);
             req.flash('message', 'Playlist removed!');
         } else {
-            await db.query("INSERT INTO `bookmark`(user_id, playlist_id) VALUES(?, ?)", [user_id, list_id]);
+            await db.query("INSERT INTO `bookmark`(user_id, playlist_id) VALUES(?, ?)", [user_id, playlistId]);
             req.flash('message', 'Playlist saved!');
         }
 

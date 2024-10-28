@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<%- include('../views/components/admin_header') %>
+   <%- include('../../views/components/admin_header', { message: message, profile: profile }); %>
 
 <section class="comments">
    <h1 class="heading">User Comments</h1>
@@ -18,7 +18,7 @@
    <div class="show-comments">
       <% if (comments && comments.length > 0) { %>
          <% comments.forEach(comment => { %>
-            <div class="box" style="<%= comment.tutor_id === tutor_id ? 'order:-1;' : '' %>">
+            <div class="box" style="<%= comment.tutor_id === tutor_id ? 'order: -1;' : '' %>">
                <div class="content">
                   <span><%= comment.date %></span>
                   <p> - <%= comment.content_title %> - </p>
@@ -37,7 +37,7 @@
    </div>
 </section>
 
-<%- include('../views/components/footer') %>
+<%- include('../../views/components/footer'); %>
 <script src="/js/admin_script.js"></script>
 </body>
 </html>

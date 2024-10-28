@@ -5,26 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <!-- font awesome cdn link  -->
+    <!-- Font Awesome CDN link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <!-- custom css file link -->
+    <!-- Custom CSS file link -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <% include('components/user_header') %>
+    <%- include('components/user_header') %>
 
+    <!-- Quick select section starts -->
     <section class="quick-select">
         <h1 class="heading">Quick Options</h1>
         <div class="box-container">
-            <% if (user_id) { %>
+            <% if (typeof user_id !== 'undefined' && user_id) { %>
             <div class="box">
                 <h3 class="title">Likes and Comments</h3>
-                <p>Total Likes: <span><%= total_likes %></span></p> <!-- Updated -->
+                <p>Total Likes: <span><%= total_likes %></span></p>
                 <a href="/likes" class="inline-btn">View Likes</a>
-                <p>Total Comments: <span><%= total_comments %></span></p> <!-- Updated -->
+                <p>Total Comments: <span><%= total_comments %></span></p>
                 <a href="/comments" class="inline-btn">View Comments</a>
-                <p>Saved Playlist: <span><%= total_bookmarked %></span></p> <!-- Updated -->
+                <p>Saved Playlist: <span><%= total_bookmarked %></span></p>
                 <a href="/bookmark" class="inline-btn">View Bookmark</a>
             </div>
             <% } else { %>
@@ -36,12 +37,46 @@
                 </div>
             </div>
             <% } %>
+
+            <div class="box">
+                <h3 class="title">Top Categories</h3>
+                <div class="flex">
+                    <a href="/search_course?category=development"><i class="fas fa-code"></i><span>Development</span></a>
+                    <a href="#"><i class="fas fa-chart-simple"></i><span>Business</span></a>
+                    <a href="#"><i class="fas fa-pen"></i><span>Design</span></a>
+                    <a href="#"><i class="fas fa-chart-line"></i><span>Marketing</span></a>
+                    <a href="#"><i class="fas fa-music"></i><span>Music</span></a>
+                    <a href="#"><i class="fas fa-camera"></i><span>Photography</span></a>
+                    <a href="#"><i class="fas fa-cog"></i><span>Software</span></a>
+                    <a href="#"><i class="fas fa-vial"></i><span>Science</span></a>
+                </div>
+            </div>
+
+            <div class="box">
+                <h3 class="title">Popular Topics</h3>
+                <div class="flex">
+                    <a href="#"><i class="fab fa-html5"></i><span>HTML</span></a>
+                    <a href="#"><i class="fab fa-css3"></i><span>CSS</span></a>
+                    <a href="#"><i class="fab fa-js"></i><span>JavaScript</span></a>
+                    <a href="#"><i class="fab fa-react"></i><span>React</span></a>
+                    <a href="#"><i class="fab fa-php"></i><span>PHP</span></a>
+                    <a href="#"><i class="fab fa-bootstrap"></i><span>Bootstrap</span></a>
+                </div>
+            </div>
+
+            <div class="box tutor">
+                <h3 class="title">Become a Tutor</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, laudantium.</p>
+                <a href="/admin/register" class="inline-btn">Get Started</a>
+            </div>
         </div>
     </section>
+   
+    
 
-    <% include('components/footer') %>
+    <%- include('components/footer') %>
 
-    <!-- custom js file link -->
+    <!-- Custom JS file link -->
     <script src="/js/script.js"></script>
 </body>
 </html>
