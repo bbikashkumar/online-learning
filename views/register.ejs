@@ -16,17 +16,11 @@
 
    <%- include('components/user_header.ejs', { messages: messages }); %>
 
-   <% if (messages && messages.length > 0) { %>
-      <% messages.forEach(message => { %>
-         <div class="message form">
-            <span><%= message %></span>
-            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-         </div>
-      <% }) %>
-   <% } %>
+   <!-- Message container for validation errors -->
+   <div id="messageContainer"></div>
 
 <section class="form-container">
-   <form class="register" action="/register" method="post" >
+   <form class="register" id="registerForm" action="/register" method="post">
       <h3>Create Account</h3>
       <div class="flex">
          <div class="col">
@@ -37,13 +31,11 @@
          </div>
          <div class="col">
             <p>Your Password <span>*</span></p>
-            <input type="password" name="pass" placeholder="Enter your password" minlength="8" maxlength="20" required class="box">
+            <input type="password" id="password" name="pass" placeholder="Enter your password" minlength="6" maxlength="20" required class="box">
             <p>Confirm Password <span>*</span></p>
-            <input type="password" name="cpass" placeholder="Confirm your password" minlength="8" maxlength="20" required class="box">
+            <input type="password" id="confirmPassword" name="cpass" placeholder="Confirm your password" minlength="6" maxlength="20" required class="box">
          </div>
       </div>
-      <!-- <p>Select Picture <span>*</span></p>
-      <input type="file" name="image" accept="image/*" required class="box"> -->
       <p class="link">Already have an account? <a href="/login">Login now</a></p>
       <input type="submit" name="submit" value="Register Now" class="btn">
    </form>
@@ -53,5 +45,43 @@
 
 <!-- custom js file link  -->
 <script src="/js/script.js"></script>
+<script>
+   // Password pattern for validation
+   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=.*\d).{6,}$/;
+
+   document.getElementById("registerForm").addEventListener("submit", function (event) {
+      // Get the password and confirm password values
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const messageContainer = document.getElementById("messageContainer");
+
+      // Clear previous messages
+      messageContainer.innerHTML = "";
+      
+      let errors = [];
+
+      // Validate password pattern
+      if (!passwordPattern.test(password)) {
+         errors.push("Password should have at least 6 characters, including uppercase, lowercase, symbols, and numbers.");
+      }
+
+      // Check if the passwords match
+      if (password !== confirmPassword) {
+         errors.push("Passwords do not match.");
+      }
+
+      // If there are errors, display them and prevent form submission
+      if (errors.length > 0) {
+         event.preventDefault();
+
+         errors.forEach(error => {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message form";
+            messageDiv.innerHTML = `<span>${error}</span><i class="fas fa-times" onclick="this.parentElement.remove();"></i>`;
+            messageContainer.appendChild(messageDiv);
+         });
+      }
+   });
+</script>
 </body>
 </html>

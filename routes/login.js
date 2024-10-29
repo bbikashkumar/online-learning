@@ -23,10 +23,10 @@ router.get('/', (req, res) => {
 });
 
 // Route to handle login form submission
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
     console.log("Form submitted:", req.body);
     const email = req.body.email.trim();
-    const password = req.body.pass; // Assume this is the plain text password
+    const password = req.body.pass; 
 
     try {
         const [rows] = await db.query("SELECT * FROM `users` WHERE email = ? LIMIT 1", [email]);
@@ -35,22 +35,31 @@ router.post('/login', async (req, res) => {
         
         if (rows.length > 0) {
             const user = rows[0];
-            const isMatch = await bcrypt.compare(password, user.password);
-
-            console.log("Password match:", isMatch);
-
-            if (isMatch) {
-                console.log('Login successful, attempting to redirect...');
-                
+            // const isMatch = await bcrypt.compare(password, user.password);
+            if(password == user.password){
+                console.log('Redirecting to home...');
                 res.cookie('user_id', user.id, {
                     maxAge: 60 * 60 * 24 * 30 * 1000,
                     httpOnly: true,
-                    secure: false // Set to true if using HTTPS
+                    secure: true 
                 });
-                
-                console.log('Redirecting to home...');
-                return res.redirect('/'); // Redirect to home page
+                return res.redirect('/home'); // Redirect to home page
             }
+
+            // console.log("Password match:", isMatch);
+
+            // if (isMatch) {
+            //     console.log('Login successful, attempting to redirect...');
+                
+            //     res.cookie('user_id', user.id, {
+            //         maxAge: 60 * 60 * 24 * 30 * 1000,
+            //         httpOnly: true,
+            //         secure: true 
+            //     });
+                
+            //     console.log('Redirecting to home...');
+            //     return res.redirect('/home'); // Redirect to home page
+            // }
         }
 
         console.log('Incorrect email or password');

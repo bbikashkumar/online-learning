@@ -106,7 +106,7 @@ app.use('/tutor-profile', tutorProfileRoutes);
 app.use('/update', updateRoutes);
 app.use('/watch', watchVideoRoutes);
 
-// Admin-facing routes (use /admin prefix to avoid route clashes)
+// Admin-facing routes 
 app.use('/admin/add-content', addContentRoutes);
 app.use('/admin/add-playlist', addPlaylistRoutes);
 app.use('/admin/comments', adminCommentsRoutes);

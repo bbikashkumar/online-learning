@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     const pass = req.body.pass;
     const cpass = req.body.cpass;
 
-    // Basic input sanitization (improve as needed)
+    // Basic input sanitization 
     const sanitized_name = name;
     const sanitized_email = email;
     const sanitized_pass = pass;
